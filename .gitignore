@@ -1,0 +1,5 @@
+terraform/.terraform.lock.hcl
+terraform/.terraform.tfstate.lock.info
+terraform/Rocky-9-Vagrant-Vbox-9.4-20240509.0.x86_64.box
+terraform/terraform.tfstate
+terraform/.terraform/providers/registry.terraform.io/terra-farm/virtualbox/0.2.2-alpha.1/linux_amd64/terraform-provider-virtualbox_v0.2.2-alpha.1
