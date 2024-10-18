@@ -1,3 +1,4 @@
+---
 - name: Enable and start Cassandra services
   hosts: all
   vars_files: "../definitions.yaml"
