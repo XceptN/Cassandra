@@ -1,0 +1,14 @@
+cassandra:
+  hosts:
+    cassandra01: 
+      ansible_host: 192.168.56.15
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: /home/oyuksel/Technologies/Cassandra/vagrant/.vagrant/machines/cassandra01/virtualbox/private_key
+    cassandra02: 
+      ansible_host: 192.168.56.16
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: /home/oyuksel/Technologies/Cassandra/vagrant/.vagrant/machines/cassandra02/virtualbox/private_key
+    cassandra03: 
+      ansible_host: 192.168.56.17
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: /home/oyuksel/Technologies/Cassandra/vagrant/.vagrant/machines/cassandra03/virtualbox/private_key

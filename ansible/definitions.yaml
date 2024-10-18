@@ -1,0 +1,3 @@
+cassandra01_ip: 192.168.56.15
+cassandra02_ip: 192.168.56.16
+cassandra03_ip: 192.168.56.17

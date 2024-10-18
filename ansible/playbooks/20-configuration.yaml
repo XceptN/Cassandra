@@ -1,0 +1,80 @@
+---
+- name: Configure Cassandra Nodes
+  hosts: all
+  vars_files: "../definitions.yaml"
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Create cdc_raw directory
+      ansible.builtin.file:
+        path: /var/lib/cassandra/cdc_raw
+        state: directory
+        owner: cassandra
+        group: cassandra
+        mode: '0755'
+
+    - name: Switch to password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^authenticator:'
+        line: 'authenticator: PasswordAuthenticator'
+
+    - name: Use Cassandra authorizer
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^authorizer:'
+        line: 'authorizer: CassandraAuthorizer'
+
+    - name: Enable CDC
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^cdc_enabled:'
+        line: 'cdc_enabled: true'
+
+    - name: Set cdc_raw directory
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^# cdc_raw_directory:'
+        line: 'cdc_raw_directory: /var/lib/cassandra/cdc_raw'
+
+    - name: Setup snitch method
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^endpoint_snitch:'
+        line: 'endpoint_snitch: GossipingPropertyFileSnitch'
+
+    - name: Setup seeds
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^      - seeds:'
+        line: '      - seeds: "{{ cassandra01_ip }}:7000,{{ cassandra02_ip }}:7000"'
+
+    - name: Setup listen_address parameters
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^listen_address:'
+        line: 'listen_address: {{ ansible_enp0s8.ipv4.address }}'
+
+    - name: Setup rpc_address parameters
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^rpc_address:'
+        line: 'rpc_address: {{ ansible_enp0s8.ipv4.address }}'
+
+    - name: Set JVM heap size minimum
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/jvm-server.options
+        regexp: '^#-Xms4G'
+        line: '-Xms1G'
+
+    - name: Set JVM heap size maximum
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/jvm-server.options
+        regexp: '^#-Xmx4G'
+        line: '-Xmx1G'
+
+    - name: Set GC logging location
+      ansible.builtin.lineinfile:
+        path: /etc/cassandra/conf/jvm8-server.options
+        regexp: '^#-Xloggc:'
+        line: '-Xloggc:/var/log/cassandra/gc.log'

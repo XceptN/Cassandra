@@ -1,0 +1,3 @@
+- ansible.builtin.import_playbook: 10-installation.yaml
+- ansible.builtin.import_playbook: 20-configuration.yaml
+- ansible.builtin.import_playbook: 30-enable-start.yaml
