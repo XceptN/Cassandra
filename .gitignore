@@ -3,3 +3,6 @@ terraform/.terraform.tfstate.lock.info
 terraform/Rocky-9-Vagrant-Vbox-9.4-20240509.0.x86_64.box
 terraform/terraform.tfstate
 terraform/.terraform/providers/registry.terraform.io/terra-farm/virtualbox/0.2.2-alpha.1/linux_amd64/terraform-provider-virtualbox_v0.2.2-alpha.1
+terraform/virtualbox-failed/.terraform.lock.hcl
+terraform/.terraform/providers/registry.terraform.io/dmacvicar/libvirt/0.8.0/linux_amd64/terraform-provider-libvirt_v0.8.0
+terraform/terraform.tfstate.backup
