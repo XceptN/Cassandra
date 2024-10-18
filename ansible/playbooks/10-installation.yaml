@@ -3,6 +3,7 @@
   hosts: all
   vars_files: "../definitions.yaml"
   become: true
+  gather_facts: true
   tasks:
     - name: Install Java using default repos
       ansible.builtin.package:
