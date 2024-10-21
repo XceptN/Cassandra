@@ -6,3 +6,4 @@ terraform/.terraform/providers/registry.terraform.io/terra-farm/virtualbox/0.2.2
 terraform/virtualbox-failed/.terraform.lock.hcl
 terraform/.terraform/providers/registry.terraform.io/dmacvicar/libvirt/0.8.0/linux_amd64/terraform-provider-libvirt_v0.8.0
 terraform/terraform.tfstate.backup
+.vscode/settings.json
