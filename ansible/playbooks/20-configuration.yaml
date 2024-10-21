@@ -78,3 +78,9 @@
         path: /etc/cassandra/conf/jvm8-server.options
         regexp: '^#-Xloggc:'
         line: '-Xloggc:/var/log/cassandra/gc.log'
+
+    - name: Set PYTHONPATH
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: 'export PYTHONPATH=$PYTHONPATH:$(dirname $(find /usr/lib/ -name cqlshlib))'
+        state: present
