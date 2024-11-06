@@ -52,7 +52,7 @@ extract_backup() {
 # Function to restore schema
 restore_schema() {
     local backup_name=$(echo $1 | sed 's/.tar.gz//')
-    local schema_file="$RESTORE_DIR/$backup_name/schema_$backup_name.cql"
+    local schema_file="$BACKUP_DIR/schema_$backup_name.cql"
     
     log "Starting schema restore"
 
