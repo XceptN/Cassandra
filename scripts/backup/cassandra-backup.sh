@@ -67,8 +67,18 @@ copy_snapshot_files() {
 cleanup_old_snapshots() {
     log "Cleaning up old snapshots"
     
-    # Remove old Cassandra snapshots
-    nodetool clearsnapshot
+    # Remove old (older than RETENTION_DAYS) Cassandra snapshots
+    # Calculate unix time msec RETENTION_DAYS ago
+    DT=$(date +%s%3N)
+    #THRESHOLD=$(($DT-7*24*60*60*1000))
+    THRESHOLD=$(($DT-5*60*1000))
+    TO_BE_CLEARED=$(nodetool listsnapshots | awk '{ print $1 }' | sort -u | grep -E '^[0-9]+$' | awk -v t=$THRESHOLD '$1 < 
+t')
+    for SNAPSHOT in $TO_BE_CLEARED
+    do 
+        echo "TOBECLEADER = $SNAPSHOT"
+        #nodetool clearsnapshot -u $SNAPSHOT
+    done
     
     # Remove old backup directories
     find $BACKUP_DIR -maxdepth 1 -type d -mtime +$RETENTION_DAYS -name "backup_*" | while read dir; do
