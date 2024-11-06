@@ -72,8 +72,7 @@ cleanup_old_snapshots() {
     DT=$(date +%s%3N)
     #THRESHOLD=$(($DT-7*24*60*60*1000))
     THRESHOLD=$(($DT-5*60*1000))
-    TO_BE_CLEARED=$(nodetool listsnapshots | awk '{ print $1 }' | sort -u | grep -E '^[0-9]+$' | awk -v t=$THRESHOLD '$1 < 
-t')
+    TO_BE_CLEARED=$(nodetool listsnapshots | awk '{ print $1 }' | sort -u | grep -E '^[0-9]+$' | awk -v t=$THRESHOLD '$1 < t')
     for SNAPSHOT in $TO_BE_CLEARED
     do 
         echo "TOBECLEADER = $SNAPSHOT"
