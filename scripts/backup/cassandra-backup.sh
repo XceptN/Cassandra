@@ -35,7 +35,7 @@ take_snapshot() {
 # Function to backup schema
 backup_schema() {
     log "Backing up schema"
-    cqlsh -e "DESC SCHEMA" > "$BACKUP_DIR/schema_$SNAPSHOT_NAME.cql" 2>>$LOG_FILE
+    cqlsh -u cassandra -p cassandra `hostname` -e "DESC SCHEMA" > "$BACKUP_DIR/schema_$SNAPSHOT_NAME.cql" 2>>$LOG_FILE
     if [ $? -eq 0 ]; then
         log "Schema backup completed"
     else

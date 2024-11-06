@@ -65,7 +65,7 @@ restore_schema() {
     # Restore schema
     if [ -f "$schema_file" ]; then
         log "Restoring schema from $schema_file"
-        cqlsh -f "$schema_file"
+        cqlsh -u cassandra -p cassandra `hostname` -f "$schema_file"
         if [ $? -ne 0 ]; then
             log "ERROR: Schema restore failed"
             exit 1
