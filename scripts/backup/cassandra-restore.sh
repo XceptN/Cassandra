@@ -55,6 +55,8 @@ restore_schema() {
     local schema_file="$RESTORE_DIR/$backup_name/schema_$backup_name.cql"
     
     log "Starting schema restore"
+
+    chown -R cassandra:cassandra $CASSANDRA_DATA_DIR
     
     # Start Cassandra temporarily if it's not running
     if ! nodetool status >/dev/null 2>&1; then
@@ -103,7 +105,7 @@ restore_data() {
         log "Restored $keyspace/$table"
     done
 
-    chmod -R cassandra:cassandra $CASSANDRA_DATA_DIR
+    chown -R cassandra:cassandra $CASSANDRA_DATA_DIR
 }
 
 # Function to verify restore
