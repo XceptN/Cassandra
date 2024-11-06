@@ -23,6 +23,7 @@ check_cassandra() {
         log "WARNING: Cassandra is running. It's recommended to stop Cassandra before restore."
         read -p "Do you want to stop Cassandra now? (y/n): " choice
         if [ "$choice" = "y" ]; then
+            nodetool stopdaemon
             systemctl stop cassandra
             sleep 10
         else
