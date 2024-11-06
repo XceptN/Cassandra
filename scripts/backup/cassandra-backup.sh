@@ -75,8 +75,7 @@ cleanup_old_snapshots() {
     TO_BE_CLEARED=$(nodetool listsnapshots | awk '{ print $1 }' | sort -u | grep -E '^[0-9]+$' | awk -v t=$THRESHOLD '$1 < t')
     for SNAPSHOT in $TO_BE_CLEARED
     do 
-        echo "TOBECLEADER = $SNAPSHOT"
-        #nodetool clearsnapshot -u $SNAPSHOT
+        nodetool clearsnapshot -t $SNAPSHOT
     done
     
     # Remove old backup directories
