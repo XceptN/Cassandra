@@ -102,6 +102,8 @@ restore_data() {
         
         log "Restored $keyspace/$table"
     done
+
+    chmod -R cassandra:cassandra $CASSANDRA_DATA_DIR
 }
 
 # Function to verify restore
