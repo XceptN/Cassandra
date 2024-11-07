@@ -71,7 +71,6 @@ restore_schema() {
         cqlsh -u cassandra -p cassandra `hostname` -f "$schema_file"
         if [ $? -ne 0 ]; then
             log "ERROR: Schema restore failed"
-            exit 1
         fi
     else
         log "WARNING: Schema file not found"
