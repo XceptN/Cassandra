@@ -79,9 +79,9 @@ backup_schema() {
     fi
 }
 
-# Function to take node-specific snapshot
-take_node_snapshot() {
-    log "Taking snapshot on node ${LOCAL_NODE}"
+# Function to clean up old snapshots
+cleanup_old_snapshots() {
+    log "Cleaning up old snapshots"
     
     # Remove old (older than RETENTION_DAYS) Cassandra snapshots
     # Calculate unix time msec RETENTION_DAYS ago
@@ -92,6 +92,13 @@ take_node_snapshot() {
     do 
         nodetool clearsnapshot -t $SNAPSHOT
     done
+}
+
+# Function to take node-specific snapshot
+take_node_snapshot() {
+    log "Taking snapshot on node ${LOCAL_NODE}"
+    
+    cleanup_old_snapshots
     
     # Take new snapshot
     if nodetool snapshot -t "$BACKUP_NAME"; then
@@ -148,7 +155,7 @@ cleanup_old_backups() {
     log "Cleaning up old backups"
     
     # Remove old snapshots from Cassandra
-    nodetool clearsnapshot
+    cleanup_old_snapshots
     
     # Remove old backup files
     find "${BACKUP_BASE_DIR}" -maxdepth 1 -type f -name "cluster_backup_*_${LOCAL_NODE}.tar.gz" -mtime +${RETENTION_DAYS} -exec rm -f {} \;
