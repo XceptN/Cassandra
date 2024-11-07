@@ -8,8 +8,8 @@ RETENTION_DAYS=7
 PARALLEL_JOBS=2
 
 # Array of nodes in the cluster - MODIFY THESE
-SEED_NODES=("node1.example.com" "node2.example.com")
-ALL_NODES=("node1.example.com" "node2.example.com" "node3.example.com" "node4.example.com")
+SEED_NODES=("192.168.56.15" "192.168.56.16")
+ALL_NODES=("192.168.56.15" "192.168.56.16" "192.168.56.17")
 LOCAL_NODE=$(hostname -f)
 
 # Create required directories
@@ -67,7 +67,7 @@ backup_schema() {
         # Backup schema for each keyspace
         for keyspace in $(cqlsh -e "DESC KEYSPACES" | tr ' ' '\n' | grep -v "^$"); do
             log "Backing up schema for keyspace: $keyspace"
-            cqlsh -e "DESC KEYSPACE $keyspace" >> "$schema_file" 2>>$LOG_FILE
+            cqlsh  -u cassandra -p cassandra $LOCAL_NODE -e "DESC KEYSPACE $keyspace" >> "$schema_file" 2>>$LOG_FILE
         done
         
         if [ $? -eq 0 ]; then
@@ -83,8 +83,15 @@ backup_schema() {
 take_node_snapshot() {
     log "Taking snapshot on node ${LOCAL_NODE}"
     
-    # Clear any old snapshots first
-    nodetool clearsnapshot
+    # Remove old (older than RETENTION_DAYS) Cassandra snapshots
+    # Calculate unix time msec RETENTION_DAYS ago
+    DT=$(date +%s%3N)
+    THRESHOLD=$(($DT-7*24*60*60*1000))
+    TO_BE_CLEARED=$(nodetool listsnapshots | awk '{ print $1 }' | sort -u | grep -E '^[0-9]+$' | awk -v t=$THRESHOLD '$1 < t')
+    for SNAPSHOT in $TO_BE_CLEARED
+    do 
+        nodetool clearsnapshot -t $SNAPSHOT
+    done
     
     # Take new snapshot
     if nodetool snapshot -t "$BACKUP_NAME"; then
