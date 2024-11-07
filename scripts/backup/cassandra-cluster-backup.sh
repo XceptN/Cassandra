@@ -62,7 +62,7 @@ check_cluster_health() {
 backup_schema() {
     if is_seed_node; then
         log "Backing up schema on seed node ${LOCAL_NODE}"
-        local schema_file="${BACKUP_BASE_DIR}/${BACKUP_NAME}/schema.cql"
+        local schema_file="${BACKUP_BASE_DIR}/${BACKUP_NAME}/${LOCAL_NODE}/schema.cql"
         
         cqlsh -u cassandra -p cassandra $LOCAL_NODE -e "DESC SCHEMA" > "$schema_file" 2>>$LOG_FILE
         
