@@ -10,7 +10,7 @@ CASSANDRA_CONFIG_DIR="/etc/cassandra"
 # Array of nodes in the cluster - MODIFY THESE
 SEED_NODES=("192.168.56.15" "192.168.56.16")
 ALL_NODES=("192.168.56.15" "192.168.56.16" "192.168.56.17")
-LOCAL_NODE=$(hostname -f)
+LOCAL_NODE=$(hostname -i)
 
 # Create required directories
 mkdir -p "$RESTORE_DIR"

@@ -10,7 +10,7 @@ PARALLEL_JOBS=2
 # Array of nodes in the cluster - MODIFY THESE
 SEED_NODES=("192.168.56.15" "192.168.56.16")
 ALL_NODES=("192.168.56.15" "192.168.56.16" "192.168.56.17")
-LOCAL_NODE=$(hostname -f)
+LOCAL_NODE=$(hostname -i)
 
 # Create required directories
 mkdir -p "${BACKUP_BASE_DIR}/${BACKUP_NAME}"
@@ -67,7 +67,7 @@ backup_schema() {
         # Backup schema for each keyspace
         for keyspace in $(cqlsh -e "DESC KEYSPACES" | tr ' ' '\n' | grep -v "^$"); do
             log "Backing up schema for keyspace: $keyspace"
-            cqlsh  -u cassandra -p cassandra $LOCAL_NODE -e "DESC KEYSPACE $keyspace" >> "$schema_file" 2>>$LOG_FILE
+            cqlsh -u cassandra -p cassandra $LOCAL_NODE -e "DESC KEYSPACE $keyspace" >> "$schema_file" 2>>$LOG_FILE
         done
         
         if [ $? -eq 0 ]; then
