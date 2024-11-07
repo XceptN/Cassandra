@@ -102,14 +102,15 @@ restore_schema() {
     local backup_date=$1
     
     if is_seed_node; then
-        log "Restoring schema on seed node ${LOCAL_NODE}"
-
+        # Start Cassandra temporarily for schema restore
+        log "Starting Cassandra temporarily"        
         chown -R cassandra:cassandra $CASSANDRA_DATA_DIR
         
-        # Start Cassandra temporarily for schema restore
         systemctl start cassandra
         sleep 60
         
+        log "Restoring schema on seed node ${LOCAL_NODE}"
+
         # Apply schema
         local schema_file="${RESTORE_DIR}/cluster_backup_${backup_date}/${LOCAL_NODE}/schema.cql"
         if [ -f "$schema_file" ]; then
