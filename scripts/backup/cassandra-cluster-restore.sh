@@ -111,7 +111,7 @@ restore_schema() {
         sleep 60
         
         # Apply schema
-        local schema_file="${RESTORE_DIR}/cluster_backup_${backup_date}/schema.cql"
+        local schema_file="${RESTORE_DIR}/cluster_backup_${backup_date}_${LOCAL_NODE}/schema.cql"
         if [ -f "$schema_file" ]; then
             log "Applying schema from $schema_file"
             if ! cqlsh -u cassandra -p cassandra $LOCAL_NODE -f "$schema_file"; then
