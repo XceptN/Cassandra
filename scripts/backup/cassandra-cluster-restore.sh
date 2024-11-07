@@ -118,7 +118,7 @@ restore_schema() {
                 log "ERROR: Schema restore failed"
             fi
         else
-            log "ERROR: Schema file not found"
+            log "ERROR: Schema file $schema_file not found"
             exit 1
         fi
         
