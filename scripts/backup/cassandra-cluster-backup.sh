@@ -64,11 +64,7 @@ backup_schema() {
         log "Backing up schema on seed node ${LOCAL_NODE}"
         local schema_file="${BACKUP_BASE_DIR}/${BACKUP_NAME}/schema.cql"
         
-        # Backup schema for each keyspace
-        for keyspace in $(cqlsh -e "DESC KEYSPACES" | tr ' ' '\n' | grep -v "^$"); do
-            log "Backing up schema for keyspace: $keyspace"
-            cqlsh -u cassandra -p cassandra $LOCAL_NODE -e "DESC KEYSPACE $keyspace" >> "$schema_file" 2>>$LOG_FILE
-        done
+        cqlsh -u cassandra -p cassandra $LOCAL_NODE -e "DESC SCHEMA" > "$schema_file" 2>>$LOG_FILE
         
         if [ $? -eq 0 ]; then
             log "Schema backup completed successfully"
@@ -76,6 +72,18 @@ backup_schema() {
             log "ERROR: Schema backup failed"
             exit 1
         fi
+    fi
+}
+
+# Function to backup schema
+backup_schema() {
+    log "Backing up schema"
+    cqlsh -u cassandra -p cassandra `hostname` -e "DESC SCHEMA" > "$BACKUP_DIR/schema_$SNAPSHOT_NAME.cql" 2>>$LOG_FILE
+    if [ $? -eq 0 ]; then
+        log "Schema backup completed"
+    else
+        log "ERROR: Schema backup failed"
+        exit 1
     fi
 }
 
