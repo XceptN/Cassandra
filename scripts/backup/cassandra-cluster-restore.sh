@@ -103,6 +103,8 @@ restore_schema() {
     
     if is_seed_node; then
         log "Restoring schema on seed node ${LOCAL_NODE}"
+
+        chown -R cassandra:cassandra $CASSANDRA_DATA_DIR
         
         # Start Cassandra temporarily for schema restore
         systemctl start cassandra
@@ -152,6 +154,8 @@ restore_data() {
         mkdir -p "${CASSANDRA_DATA_DIR}/${keyspace}/${table}"
         cp -r "${table_dir}"/* "${CASSANDRA_DATA_DIR}/${keyspace}/${table}/"
     done
+
+    chown -R cassandra:cassandra $CASSANDRA_DATA_DIR
 }
 
 # Function to start cluster in correct order
