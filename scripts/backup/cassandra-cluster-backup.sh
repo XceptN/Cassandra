@@ -35,7 +35,7 @@ check_cluster_health() {
     # Check if all nodes are up and normal (UN)
     local unhealthy_nodes=0
     for node in "${ALL_NODES[@]}"; do
-        if ! nodetool -h "$node" status 2>/dev/null | grep -q "UN"; then
+        if ! nodetool status 2>/dev/null | grep "$node" | grep -q "UN"; then
             log "WARNING: Node $node is not in UN state"
             ((unhealthy_nodes++))
         fi
