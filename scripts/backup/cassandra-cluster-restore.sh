@@ -8,8 +8,8 @@ CASSANDRA_DATA_DIR="/var/lib/cassandra/data"
 CASSANDRA_CONFIG_DIR="/etc/cassandra"
 
 # Array of nodes in the cluster - MODIFY THESE
-SEED_NODES=("node1.example.com" "node2.example.com")
-ALL_NODES=("node1.example.com" "node2.example.com" "node3.example.com" "node4.example.com")
+SEED_NODES=("192.168.56.15" "192.168.56.16")
+ALL_NODES=("192.168.56.15" "192.168.56.16" "192.168.56.17")
 LOCAL_NODE=$(hostname -f)
 
 # Create required directories
@@ -64,6 +64,7 @@ stop_cluster() {
     if ! is_seed_node; then
         log "Stopping non-seed node ${LOCAL_NODE}"
         nodetool drain
+        nodetool stopdaemon
         systemctl stop cassandra
         sleep 30
     else
@@ -73,6 +74,7 @@ stop_cluster() {
         
         log "Stopping seed node ${LOCAL_NODE}"
         nodetool drain
+        nodetool stopdaemon
         systemctl stop cassandra
         sleep 30
     fi
@@ -110,9 +112,8 @@ restore_schema() {
         local schema_file="${RESTORE_DIR}/cluster_backup_${backup_date}/schema.cql"
         if [ -f "$schema_file" ]; then
             log "Applying schema from $schema_file"
-            if ! cqlsh -f "$schema_file"; then
+            if ! cqlsh -u cassandra -p cassandra $LOCAL_NODE -f "$schema_file"; then
                 log "ERROR: Schema restore failed"
-                exit 1
             fi
         else
             log "ERROR: Schema file not found"
@@ -121,6 +122,7 @@ restore_schema() {
         
         # Stop Cassandra again for data restore
         nodetool drain
+        nodetool stopdaemon
         systemctl stop cassandra
         sleep 30
     fi
