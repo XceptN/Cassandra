@@ -75,18 +75,6 @@ backup_schema() {
     fi
 }
 
-# Function to backup schema
-backup_schema() {
-    log "Backing up schema"
-    cqlsh -u cassandra -p cassandra `hostname` -e "DESC SCHEMA" > "$BACKUP_DIR/schema_$SNAPSHOT_NAME.cql" 2>>$LOG_FILE
-    if [ $? -eq 0 ]; then
-        log "Schema backup completed"
-    else
-        log "ERROR: Schema backup failed"
-        exit 1
-    fi
-}
-
 # Function to clean up old snapshots
 cleanup_old_snapshots() {
     log "Cleaning up old snapshots"
