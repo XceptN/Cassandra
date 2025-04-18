@@ -91,7 +91,6 @@ cleanup_old_snapshots() {
     done
 }
 
-
 # Function to take node-specific snapshot
 take_node_snapshot() {
     log "Taking snapshot on node ${LOCAL_NODE}"

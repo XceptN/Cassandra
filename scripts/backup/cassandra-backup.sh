@@ -44,7 +44,6 @@ backup_schema() {
     fi
 }
 
-
 # Function to copy snapshot files
 copy_snapshot_files() {
     log "Copying snapshot files to backup directory"
