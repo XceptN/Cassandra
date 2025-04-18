@@ -17,6 +17,7 @@ list_backups() {
     ls -lt $BACKUP_DIR/*.tar.gz | awk '{print $9}' | xargs -n1 basename
 }
 
+
 # Function to check if Cassandra is running
 check_cassandra() {
     if nodetool status >/dev/null 2>&1; then

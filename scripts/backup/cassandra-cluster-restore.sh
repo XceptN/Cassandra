@@ -28,6 +28,7 @@ is_seed_node() {
     return $?
 }
 
+
 # Function to list available backups
 list_backups() {
     log "Available backups for node ${LOCAL_NODE}:"
