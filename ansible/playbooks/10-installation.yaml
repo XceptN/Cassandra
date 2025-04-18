@@ -5,13 +5,13 @@
   become: true
   gather_facts: true
   tasks:
-    - name: Install Java using default repos
+    - name: Install Java 1.8 using default repos
       ansible.builtin.package:
-        name: java
+        name: java-1.8.0-openjdk
         state: present
 
     - name: Add jre-1.8 to alternatives
-      ansible.builtin.command: alternatives --install /usr/bin/java java /usr/lib/jvm//jre-1.8.0/bin/java 1700
+      ansible.builtin.command: alternatives --install /usr/bin/java java /usr/lib/jvm/jre-1.8.0/bin/java 1700
       register: java_alternatives
       changed_when: java_alternatives.rc != 0
 
