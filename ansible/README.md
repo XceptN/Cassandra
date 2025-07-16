@@ -44,7 +44,7 @@ ansible/
    ```
 
 2. **Review and update the inventory:**
-   - Edit `inventory.yaml` to match your environment (hostnames, IPs, SSH keys).
+   - Edit `inventory.yaml` to match your environment (hostnames, IP addresses, SSH keys).
    - Update `group_vars/all.yaml` for cluster IPs if needed.
 
 3. **Run the playbook:**
