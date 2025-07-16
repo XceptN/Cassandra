@@ -1,61 +1,32 @@
 Vagrant.configure("2") do |config|
-    # Define cassandra01 VM
-    config.vm.define "cassandra01" do |cassandra01|
-        cassandra01.vm.box = "eurolinux-vagrant/rocky-9"
-        cassandra01.vm.hostname = "cassandra01"
-        cassandra01.vm.network "private_network", ip: "192.168.56.15"
-        cassandra01.vm.provider "virtualbox" do |vb|
-            vb.memory = "4000"
-            vb.cpus = "2"
-        end
-        # Provisioning
-        cassandra01.vm.provision "shell", inline: <<-SHELL
-            # Update system to latest
-            dnf update -y
-            # Clear EuroLinux banner
-            echo '' > /etc/motd
-            # Reboot system
-            reboot
-        SHELL
-    end
+  nodes = [
+    { name: "cassandra01", hostname: "cassandra01", ip: "192.168.56.15" },
+    { name: "cassandra02", hostname: "cassandra02", ip: "192.168.56.16" },
+    { name: "cassandra03", hostname: "cassandra03", ip: "192.168.56.17" }
+  ]
 
-    # Define cassandra02 VM
-    config.vm.define "cassandra02" do |cassandra02|
-        cassandra02.vm.box = "eurolinux-vagrant/rocky-9"
-        cassandra02.vm.hostname = "cassandra02"
-        cassandra02.vm.network "private_network", ip: "192.168.56.16"
-        cassandra02.vm.provider "virtualbox" do |vb|
-            vb.memory = "4000"
-            vb.cpus = "2"
-        end
-        # Provisioning
-        cassandra02.vm.provision "shell", inline: <<-SHELL
-            # Update system to latest
-            dnf update -y
-            # Clear EuroLinux banner
-            echo '' > /etc/motd
-            # Reboot system
-            reboot
-        SHELL
-    end
+  box_name = "eurolinux-vagrant/rocky-9"
+  memory = "4000"
+  cpus = "2"
+  provision_script = <<-SHELL
+    # Update system to latest
+    dnf update -y
+    # Clear EuroLinux banner
+    echo '' > /etc/motd
+    # Reboot system
+    reboot
+  SHELL
 
-    # Define cassandra03 VM
-    config.vm.define "cassandra03" do |cassandra03|
-        cassandra03.vm.box = "eurolinux-vagrant/rocky-9"
-        cassandra03.vm.hostname = "cassandra03"
-        cassandra03.vm.network "private_network", ip: "192.168.56.17"
-        cassandra03.vm.provider "virtualbox" do |vb|
-            vb.memory = "4000"
-            vb.cpus = "2"
-        end
-        # Provisioning
-        cassandra03.vm.provision "shell", inline: <<-SHELL
-            # Update system to latest
-            dnf update -y
-            # Clear EuroLinux banner
-            echo '' > /etc/motd
-            # Reboot system
-            reboot
-        SHELL
+  nodes.each do |node|
+    config.vm.define node[:name] do |vm|
+      vm.vm.box = box_name
+      vm.vm.hostname = node[:hostname]
+      vm.vm.network "private_network", ip: node[:ip]
+      vm.vm.provider "virtualbox" do |vb|
+        vb.memory = memory
+        vb.cpus = cpus
+      end
+      vm.vm.provision "shell", inline: provision_script
     end
   end
+end
