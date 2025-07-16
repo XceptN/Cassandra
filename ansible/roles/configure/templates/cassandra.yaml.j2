@@ -1,0 +1,13 @@
+# Cassandra configuration file (template)
+authenticator: PasswordAuthenticator
+authorizer: CassandraAuthorizer
+cdc_enabled: true
+cdc_raw_directory: /var/lib/cassandra/cdc_raw
+endpoint_snitch: GossipingPropertyFileSnitch
+seed_provider:
+  - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+    parameters:
+      - seeds: "{{ cassandra01_ip }}:7000,{{ cassandra02_ip }}:7000"
+listen_address: {{ ansible_enp0s8.ipv4.address }}
+rpc_address: {{ ansible_enp0s8.ipv4.address }}
+# ... other default settings ... 

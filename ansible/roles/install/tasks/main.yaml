@@ -1,0 +1,35 @@
+---
+- name: Install Java 1.8 using default repos
+  ansible.builtin.package:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: Add jre-1.8 to alternatives
+  ansible.builtin.command: alternatives --install /usr/bin/java java /usr/lib/jvm/jre-1.8.0/bin/java 1700
+  register: java_alternatives
+  changed_when: java_alternatives.rc != 0
+
+- name: Set jre-1.8 java default
+  ansible.builtin.command: alternatives --set java /usr/lib/jvm/jre-1.8.0/bin/java
+  register: java_alternatives
+  changed_when: java_alternatives.rc != 0
+
+- name: Verify Java installation
+  ansible.builtin.command: java -version
+  register: java_version
+  changed_when: false
+
+- name: Display Java version
+  ansible.builtin.debug:
+    var: java_version.stderr_lines
+
+- name: Define Cassandra DNF repo
+  ansible.builtin.copy:
+    src: cassandra.repo
+    dest: /etc/yum.repos.d/
+    mode: '644'
+
+- name: Install Cassandra
+  ansible.builtin.package:
+    name: cassandra
+    state: present 

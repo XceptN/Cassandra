@@ -1,0 +1,13 @@
+---
+- name: Install chkconfig
+  ansible.builtin.package:
+    name: chkconfig
+    state: present
+
+- name: Enable Cassandra service
+  ansible.builtin.service:
+    name: cassandra
+    enabled: true
+
+- name: Reboot Nodes
+  ansible.builtin.reboot: 

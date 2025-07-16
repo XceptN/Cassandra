@@ -1,0 +1,38 @@
+---
+- name: Create cdc_raw directory
+  ansible.builtin.file:
+    path: /var/lib/cassandra/cdc_raw
+    state: directory
+    owner: cassandra
+    group: cassandra
+    mode: '0755'
+
+- name: Deploy cassandra.yaml configuration
+  ansible.builtin.template:
+    src: cassandra.yaml.j2
+    dest: /etc/cassandra/conf/cassandra.yaml
+    owner: cassandra
+    group: cassandra
+    mode: '0644'
+
+- name: Deploy jvm-server.options configuration
+  ansible.builtin.template:
+    src: jvm-server.options.j2
+    dest: /etc/cassandra/conf/jvm-server.options
+    owner: cassandra
+    group: cassandra
+    mode: '0644'
+
+- name: Deploy jvm8-server.options configuration
+  ansible.builtin.template:
+    src: jvm8-server.options.j2
+    dest: /etc/cassandra/conf/jvm8-server.options
+    owner: cassandra
+    group: cassandra
+    mode: '0644'
+
+- name: Set PYTHONPATH
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    line: 'export PYTHONPATH=$PYTHONPATH:$(dirname $(find /usr/lib/ -name cqlshlib))'
+    state: present 

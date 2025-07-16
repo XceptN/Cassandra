@@ -1,13 +1,9 @@
-- name: Do everything for Cassandra cluster
+---
+- name: Setup and configure Cassandra cluster
   hosts: all
-  gather_facts: false
-  tasks: []
-
-- name: Perform all installations
-  ansible.builtin.import_playbook: 10-installation.yaml
-
-- name: Configure Cassandra Nodes
-  ansible.builtin.import_playbook: 20-configuration.yaml
-
-- name: Enable and start Cassandra services
-  ansible.builtin.import_playbook: 30-enable-start.yaml
+  become: true
+  gather_facts: true
+  roles:
+    - install
+    - configure
+    - service
